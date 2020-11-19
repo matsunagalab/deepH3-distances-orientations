@@ -30,7 +30,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 # Relative paths from deeph3/data
-_DEFAULT_SUMMARY_FILE_PATH = 'info/sabdab_summary.tsv'
+#_DEFAULT_SUMMARY_FILE_PATH = 'info/sabdab_summary.tsv'
+_DEFAULT_SUMMARY_FILE_PATH = 'vhh.tsv'
 _DEFAULT_ANTIBODY_DATABASE_PATH = 'antibody_database/'
 
 
@@ -298,7 +299,7 @@ def download_train_dataset(summary_file_path=_DEFAULT_SUMMARY_FILE_PATH,
             os.mkdir(dir_)
 
     # Get all the PDB ID's for the training set
-    download_sabdab_summary_file(summary_file_path=summary_file_path, **kwargs)
+    #download_sabdab_summary_file(summary_file_path=summary_file_path, **kwargs)
     summary_dataframe = pd.read_csv(summary_file_path, sep='\t')
     all_pdbs = set(summary_dataframe['pdb'].unique())
 

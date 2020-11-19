@@ -89,9 +89,10 @@ def antibody_to_h5(pdb_dir, out_file_path, fasta_dir=None,
 
         # Get primary structures
         heavy_prim = info['H']
-        light_prim = info['L']
+        #light_prim = info['L']
 
-        total_len = len(heavy_prim) + len(light_prim)
+        #total_len = len(heavy_prim) + len(light_prim)
+        total_len = len(heavy_prim)
 
         id_set[index] = np.string_(id_)
 
@@ -106,10 +107,12 @@ def antibody_to_h5(pdb_dir, out_file_path, fasta_dir=None,
                 info['dist_angle_mat']), pdb_file))
 
         h_len_set[index] = len(heavy_prim)
-        l_len_set[index] = len(light_prim)
+        #l_len_set[index] = len(light_prim)
+        l_len_set[index] = 0
 
         h_prim_set[index, :len(heavy_prim)] = np.array(heavy_prim)
-        l_prim_set[index, :len(light_prim)] = np.array(light_prim)
+        #l_prim_set[index, :len(light_prim)] = np.array(light_prim)
+        l_prim_set[index, :0] = np.array([])
 
         for h_set, name in [(h1_set, 'h1'), (h2_set, 'h2'), (h3_set, 'h3'),
                             (l1_set, 'l1'), (l2_set, 'l2'), (l3_set, 'l3')]:

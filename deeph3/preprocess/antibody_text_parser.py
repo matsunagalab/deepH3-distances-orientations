@@ -155,6 +155,7 @@ def get_cdr_indices(pdb_file_path):
 
 
 def get_info(pdb_file, fasta_file=None, verbose=True):
+    print("pdb_fie = " + pdb_file)
     if fasta_file is not None:
         chain_seqs = get_chain_seqs(fasta_file)
     else:
