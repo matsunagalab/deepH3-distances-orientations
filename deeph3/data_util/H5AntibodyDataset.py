@@ -55,18 +55,19 @@ class H5AntibodyDataset(data.Dataset):
 
         # Get the attributes from a protein and cut off zero padding
         heavy_prim = self.h5file['heavy_chain_primary'][index, :heavy_seq_len]
-        light_prim = self.h5file['light_chain_primary'][index, :light_seq_len]
+        #light_prim = self.h5file['light_chain_primary'][index, :light_seq_len]
 
         # Convert to torch tensors
         heavy_prim = torch.Tensor(heavy_prim).type(dtype=torch.uint8)
-        light_prim = torch.Tensor(light_prim).type(dtype=torch.uint8)
+        light_prim = torch.Tensor([]).type(dtype=torch.uint8)
 
         # Get CDR loops
         h3 = self.h5file['h3_range'][index]
 
         if self.onehot_prim:
             heavy_prim = F.one_hot(heavy_prim.long())
-            light_prim = F.one_hot(light_prim.long())
+            #light_prim = F.one_hot(light_prim.long())
+            light_prim = torch.Tensor([]).type(dtype=torch.int64)
 
         # Try to get the distance matrix from memory
         try:
@@ -203,7 +204,8 @@ class H5AntibodyBatch:
     def features(self):
         """Gets the one-hot encoding of the sequences with a feature that
         delimits the chains"""
-        X = [torch.cat(_, 0) for _ in zip(self.heavy_prim, self.light_prim)]
+        #X = [torch.cat(_, 0) for _ in zip(self.heavy_prim, self.light_prim)]
+        X = self.heavy_prim
         X = pad_data_to_same_shape(X, pad_value=0)
 
         # Add chain delimiter

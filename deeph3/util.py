@@ -84,7 +84,7 @@ def load_full_seq(fasta_file):
         return ''.join([seq.rstrip() for seq in f.readlines() if seq[0] != '>'])
 
 
-def get_logits_from_model(model, fasta_file, chain_delimiter=True):
+def get_logits_from_model(model, fasta_file, chain_delimiter=False):
     """Gets the probability distribution output of a H3ResNet model"""
     seq = one_hot_seq(load_full_seq(fasta_file)).float()
     if chain_delimiter:
@@ -98,7 +98,11 @@ def get_logits_from_model(model, fasta_file, chain_delimiter=True):
             raise ValueError('No heavy chain detected. Cannot add chain delimiter')
         seq[h_len-1, seq.shape[1]-1] = 1
 
+    print(seq)
+    print(seq.shape)
     seq = seq.unsqueeze(0).transpose(1, 2)
+    print(seq)
+    print(seq.shape)
     with torch.no_grad():
         return model(seq)[0]
 
@@ -488,7 +492,16 @@ def load_model(file_name, num_blocks1D=3, num_blocks2D=25):
                       num_blocks1D=num_blocks1D, num_blocks2D=num_blocks2D,
                       dilation_cycle=dilation_cycle)
     model = nn.Sequential(resnet)
-    model.load_state_dict(model_state)
+
+    from collections import OrderedDict
+    new_model_state = OrderedDict()
+    for k, v in model_state.items():
+        k_new = '0.' + k
+        new_model_state[k_new] = v
+
+    #model.load_state_dict(model_state)
+    model.load_state_dict(new_model_state)
+
     model.eval()
 
     return model
